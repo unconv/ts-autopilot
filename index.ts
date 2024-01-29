@@ -157,6 +157,7 @@ Respond only with the name of the command needed to be run next. For example, if
     }
 
     console.log( "Done" );
+    process.exit( 0 );
 }
 
 main();
