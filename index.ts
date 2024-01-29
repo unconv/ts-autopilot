@@ -10,15 +10,13 @@ type WriteFileState = {
 
 type State = WriteFileState | null;
 
-async function input( prompt: string ) {
+async function input( prompt: string ): Promise<string> {
     console.log( prompt );
     return new Promise( resolve => {
         const stdin = process.openStdin();
         stdin.addListener( "data", function( d ) {
-            const input = d.toString().trim();
-            stdin.removeAllListeners( "data" );
+            resolve( d.toString().trim() );
             stdin.end();
-            resolve( input );
         } );
     } );
 }
@@ -84,6 +82,8 @@ async function main() {
 
     let state: State = null;
 
+    const prompt: string = await input("What do you want to create?");
+
     const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
         {
             role: 'system',
@@ -108,7 +108,7 @@ Respond only with the name of the command needed to be run next. For example, if
         },
         {
             role: 'user',
-            content: 'Create a Flask app that shows a different random joke every time you click a button. Add a readme file on how to run it and make sure to create it professionally'
+            content: prompt
         },
     ];
 
