@@ -30,11 +30,12 @@ async function initialize() {
     if( files.length > 0 ) {
         console.log( "WARNING: There are files in the code directory." );
 
-        if( await input( "Do you want to delete them? " ) === "yes" ) {
+        if( await input( "Do you want to delete them? (yes/no)" ) === "yes" ) {
             for( const file of files ) {
                 fs.rmSync( `code/${file}`, { recursive: true } );
             }
         }
+        console.log("");
     }
 }
 
@@ -125,8 +126,6 @@ Respond only with the name of the command needed to be run next. For example, if
             throw new Error( "Message content is null" );
         }
 
-        console.log( "<MESSAGE_CONTENT>" + message_content + "</MESSAGE_CONTENT>" );
-
         messages.push( message );
 
         if( message_content.indexOf( 'write_file' ) === 0 ) {
@@ -134,13 +133,11 @@ Respond only with the name of the command needed to be run next. For example, if
             const file_contents = message_content.split( '\n' ).slice( 1 ).join( '\n' );
 
             if( file_contents.trim() === '' ) {
-                console.log("SETTING STATE: write_file");
                 state = {
                     type: 'write_file',
                     filename: filename,
                 };
             } else {
-                console.log("WRITING FILE DIRECTLY");
                 write_file( filename, file_contents );
             }
         } else if( message_content.indexOf( 'create_dir' ) === 0 ) {
@@ -154,7 +151,6 @@ Respond only with the name of the command needed to be run next. For example, if
             console.log("TASK FINISHED");
             break;
         } else if( state && state.type == "write_file" ) {
-            console.log("WRITING FILE FROM STATE");
             write_file( state.filename, message_content );
             state = null;
         }
