@@ -8,5 +8,6 @@ This is my first ever TypeScript project
 
 ## Quick Start
 ```bash
+$ export OPENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 $ npm run run
 ```
